@@ -1,57 +1,70 @@
-def score(game):
-    result = 0
-    frame = 1
-    in_first_half = True
+SPARE = '/'
+STRIKE = 'x'
+GUTTER = '-'
+
+
+def score(game, result=0, frame=1, in_first_half=True):
+    '''
+    A scoring algorhythm for a game of bowling.
+
+    Args:
+        game: a string of characters with numbers, and
+              symbols for spare (/), strike (x), and gutter(-)
+
+    Optional args:
+        result: the base score to start with (integer)
+        frame: the base frame to start with (integer)
+        in_first_half: the base roll to start with (boolean)
+
+    Returns:
+        the result of the game, integer
+    '''
     for i in range(len(game)):
-        if game[i] == '/':
-            result += 10 - last
+        current = game[i].lower()
+        next_value = get_value(game[(i + 1) % len(game)])
+        prev_value = get_value(game[i - 1])
+
+        if current == SPARE:
+            result += 10 - prev_value
         else:
-            result += get_value(game[i])
-        # if not in_first_half:
-            # frame += 1
-        if frame < 10 and get_value(game[i]) == 10:
-            if game[i] == '/':
-                result += get_value(game[i + 1])
-            elif game[i] == 'X' or game[i] == 'x':
-                result += get_value(game[i + 1])
-                if game[i + 2] == '/':
-                    result += 10 - get_value(game[i + 1])
+            result += get_value(current)
+
+        if frame < 10 and get_value(current) == 10:    # if strike or spare, and not 10th round
+            if current == SPARE:
+                result += next_value
+            elif current == STRIKE:
+                result += next_value
+                if game[i + 2] == SPARE:
+                    result += 10 - next_value
                 else:
                     result += get_value(game[i + 2])
-        last = get_value(game[i])
-        if not in_first_half:
+
+        if current == STRIKE:
+            in_first_half = True
             frame += 1
-        if in_first_half is True:
+        elif in_first_half:
             in_first_half = False
         else:
-            in_first_half = True
-        if game[i] == 'X' or game[i] == 'x':
-            in_first_half = True
             frame += 1
+            in_first_half = True
+
     return result
 
 
-'''
 def get_value(char):
-    if char == '1' or char == '2' or char == '3' or \
-       char == '4' or char == '5' or char == '6' or \
-       char == '7' or char == '8' or char == '9':
-        return int(char)
-    elif char == 'X' or char == 'x':
-        return 10
-    elif char == '/':
-        return 10
-    elif char == '-':
-        return 0
-    else:
-        raise ValueError()
-'''
+    '''
+    Converts the symbols in bowling to appropriate values from 1-10.
 
+    Args:
+        single character string to convert
 
-def get_value(char):
-    if char.lower() == 'x' or char == '/':
+    Returns:
+        integer from 0-10
+    '''
+    char = char.lower()
+    if char == STRIKE or char == SPARE:
         return 10
-    elif char == '-':
+    elif char == GUTTER:
         return 0
     else:
         try:
