@@ -5,22 +5,26 @@ GUTTER = '-'
 
 def score(game, result=0, frame=1, in_first_half=True):
     for i in range(len(game)):
-        if game[i] == SPARE:
-            result += 10 - get_value(game[i - 1])
-        else:
-            result += get_value(game[i])
+        current = game[i]
+        next_value = get_value(game[(i + 1) % len(game)])
+        prev_value = get_value(game[i - 1])
 
-        if frame < 10 and get_value(game[i]) == 10:    # if character is x or /, and not last round
-            if game[i] == SPARE:
-                result += get_value(game[i + 1])
-            elif game[i].lower() == STRIKE:
-                result += get_value(game[i + 1])
+        if current == SPARE:
+            result += 10 - prev_value
+        else:
+            result += get_value(current)
+
+        if frame < 10 and get_value(current) == 10:    # if character is x or /, and not last round
+            if current == SPARE:
+                result += next_value
+            elif current.lower() == STRIKE:
+                result += next_value
                 if game[i + 2] == SPARE:
-                    result += 10 - get_value(game[i + 1])
+                    result += 10 - next_value
                 else:
                     result += get_value(game[i + 2])
 
-        if game[i].lower() == STRIKE:
+        if current.lower() == STRIKE:
             in_first_half = True
             frame += 1
         elif in_first_half:
