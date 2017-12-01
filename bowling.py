@@ -53,7 +53,9 @@ def get_value(char):
         return 10
     elif char == '-':
         return 0
-    elif char in ["1", "2", "3", "4", "5", "6", "7", "8", "9"]:
-        return int(char)
     else:
-        raise ValueError("{} is not a valid score in bowling.".format(char.upper()))
+        try:
+            return int(char)
+        except ValueError:
+            pass
+    raise ValueError("{} is not a valid score in bowling.".format(char.upper()))
