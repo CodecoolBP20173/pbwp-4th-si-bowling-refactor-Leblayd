@@ -61,7 +61,8 @@ def get_value(char):
     Returns:
         integer from 0-10
     '''
-    if char.lower() == STRIKE or char == SPARE:
+    char = char.lower()
+    if char == STRIKE or char == SPARE:
         return 10
     elif char == GUTTER:
         return 0
