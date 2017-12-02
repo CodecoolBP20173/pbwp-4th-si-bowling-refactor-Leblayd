@@ -1,7 +1,7 @@
 SPARE = '/'
 STRIKE = 'x'
 GUTTER = '-'
-
+MAX_POINT = 10
 
 def score(game, result=0, frame=1, in_first_half=True, frame_length=10):
     '''
@@ -29,17 +29,17 @@ def score(game, result=0, frame=1, in_first_half=True, frame_length=10):
         after_next = game[(i + 2) % len(game)]
 
         if current == SPARE:
-            result += 10 - prev_value
+            result += MAX_POINT - prev_value
         else:
             result += get_value(current)
 
-        if frame < frame_length and get_value(current) == 10:
+        if frame < frame_length and get_value(current) == MAX_POINT:
             if current == SPARE:
                 result += next_value
             elif current == STRIKE:
                 result += next_value
                 if after_next == SPARE:
-                    result += 10 - next_value
+                    result += MAX_POINT - next_value
                 else:
                     result += get_value(after_next)
 
@@ -67,7 +67,7 @@ def get_value(char):
     '''
     char = char.lower()
     if char == STRIKE or char == SPARE:
-        return 10
+        return MAX_POINT
     elif char == GUTTER:
         return 0
     else:
