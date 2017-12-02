@@ -3,6 +3,7 @@ STRIKE = 'x'
 GUTTER = '-'
 MAX_POINT = 10
 
+
 def score(game, result=0, frame=1, in_first_half=True, frame_length=10):
     '''
     A scoring algorhythm for a game of bowling.
