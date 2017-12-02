@@ -24,9 +24,9 @@ def score(game, result=0, frame=1, in_first_half=True, frame_length=10):
     '''
     for i in range(len(game)):
         current = game[i].lower()
-        next_value = get_value(game[(i + 1) % len(game)])
         prev_value = get_value(game[i - 1])
-        after_next_value = get_value(game[(i + 2) % len(game)])
+        next_value = get_value(game[(i + 1) % len(game)])
+        after_next = game[(i + 2) % len(game)]
 
         if current == SPARE:
             result += 10 - prev_value
@@ -38,10 +38,10 @@ def score(game, result=0, frame=1, in_first_half=True, frame_length=10):
                 result += next_value
             elif current == STRIKE:
                 result += next_value
-                if game[i + 2] == SPARE:
+                if after_next == SPARE:
                     result += 10 - next_value
                 else:
-                    result += after_next_value
+                    result += get_value(after_next)
 
         if current == STRIKE:
             in_first_half = True
