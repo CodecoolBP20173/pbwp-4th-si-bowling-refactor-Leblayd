@@ -3,33 +3,37 @@ STRIKE = 'x'
 GUTTER = '-'
 
 
-def score(game, result=0, frame=1, in_first_half=True):
+def score(game, result=0, frame=1, in_first_half=True, frame_length=10):
     '''
     A scoring algorhythm for a game of bowling.
+    The maximum lenght can be changed,
+    but it doesn't matter if it's shorter.
 
-    Args:
+    Args:\n
         game: a string of characters with numbers, and
               symbols for spare (/), strike (x), and gutter(-)
 
-    Optional args:
-        result: the base score to start with (integer)
-        frame: the base frame to start with (integer)
-        in_first_half: the base roll to start with (boolean)
+    Optional args:\n
+        result: the base score to start with\t
+        frame: the base frame to start with\t
+        in_first_half: the base roll to start with\t
+        frame_length: the number of frames\t
 
-    Returns:
+    Returns:\n
         the result of the game, integer
     '''
     for i in range(len(game)):
         current = game[i].lower()
         next_value = get_value(game[(i + 1) % len(game)])
         prev_value = get_value(game[i - 1])
+        after_next_value = get_value(game[(i + 2) % len(game)])
 
         if current == SPARE:
             result += 10 - prev_value
         else:
             result += get_value(current)
 
-        if frame < 10 and get_value(current) == 10:    # if strike or spare, and not 10th round
+        if frame < frame_length and get_value(current) == 10:
             if current == SPARE:
                 result += next_value
             elif current == STRIKE:
@@ -37,7 +41,7 @@ def score(game, result=0, frame=1, in_first_half=True):
                 if game[i + 2] == SPARE:
                     result += 10 - next_value
                 else:
-                    result += get_value(game[i + 2])
+                    result += after_next_value
 
         if current == STRIKE:
             in_first_half = True
